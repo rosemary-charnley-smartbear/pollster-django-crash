@@ -132,7 +132,7 @@ REST_FRAMEWORK = {
 
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Pollster API',
-    'DESCRIPTION': 'Your bookish project description',
+    'DESCRIPTION': 'Pollster API Project',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
     'OAS_VERSION': '3.1.0',

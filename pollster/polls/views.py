@@ -15,12 +15,9 @@ class QuestionViewSet(viewsets.ModelViewSet):
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
 
-    @action(detail=True, methods=['get'])
-    def question_id(self, request, pk=None):
-        question = get_object_or_404(Question, pk=pk)
-        question_by_id = question.objects.filter(id=question.id)
-        serializer = self.get_serializer(question_by_id, many=True)
-        return Response(serializer.data)
+class ChoiceViewSet(viewsets.ModelViewSet):
+    queryset = Choice.objects.all()
+    serializer_class = ChoiceSerializer
 
 # Get questions and display them
 
