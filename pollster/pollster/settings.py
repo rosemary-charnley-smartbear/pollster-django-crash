@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+from django.core.management.commands.runserver import Command as rs
+
+# Windows BS. Change port from default 8080 to 5000
+rs.default_port='5000'
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -38,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'drf_spectacular'
 ]
 
 MIDDLEWARE = [
@@ -119,3 +124,36 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Pollster API',
+    'DESCRIPTION': 'Your bookish project description',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    'OAS_VERSION': '3.1.0',
+    "SERVERS": [
+        {
+            "url": "http://localhost:5000/",
+            "description": "Development server",
+        },
+    ],
+    # OTHER SETTINGS
+    'EXTENSIONS_INFO': {
+        'x-speakeasy-retries': {
+            'strategy': 'backoff',
+            'backoff': {
+                'initialInterval': 500,
+                'maxInterval': 60000,
+                'maxElapsedTime': 3600000,
+                'exponent': 1.5,
+            },
+            'statusCodes': ['5XX'],
+            'retryConnectionErrors': True,
+        },
+    },
+}

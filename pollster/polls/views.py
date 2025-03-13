@@ -2,8 +2,25 @@ from django.template import loader
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
+from rest_framework import viewsets
+from rest_framework.response import Response
+from rest_framework.decorators import action
+from django.shortcuts import get_object_or_404
+from .models import Question, Choice
+from .serializers import QuestionSerializer, ChoiceSerializer
 
 from .models import Question, Choice
+
+class QuestionViewSet(viewsets.ModelViewSet):
+    queryset = Question.objects.all()
+    serializer_class = QuestionSerializer
+
+    @action(detail=True, methods=['get'])
+    def question_id(self, request, pk=None):
+        question = get_object_or_404(Question, pk=pk)
+        question_by_id = question.objects.filter(id=question.id)
+        serializer = self.get_serializer(question_by_id, many=True)
+        return Response(serializer.data)
 
 # Get questions and display them
 
